@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'lab.dart';
+import 'providers/course_provider.dart';
 import 'responsive_shell.dart';
 
 const bool useLab = false;
 
-void main() => runApp(const CourseExplorerApp());
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CourseProvider(),
+      child: const CourseExplorerApp(),
+    ),
+  );
+}
 
 class CourseExplorerApp extends StatelessWidget {
   const CourseExplorerApp({super.key});

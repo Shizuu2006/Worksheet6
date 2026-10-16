@@ -54,5 +54,12 @@ Perbandingan dengan `setState()`:
 
 Saat state berubah di `toggleFavorite()`, pemanggilan `notifyListeners()` wajib dilakukan agar semua listener yang mendengarkan provider ini diberitahu untuk membangun ulang UI mereka. Pengujian unit pada `test/course_provider_test.dart` membuktikan bahwa listener terpanggil tepat 2 kali untuk 2 kali toggle dan data favorit tersimpan dengan benar.
 
+## Tahap 6 - Memasang Provider pada Widget Tree
+
+Dependency `provider` berhasil ditambahkan ke `pubspec.yaml` dan perintah `flutter pub get` dijalankan.
+
+`ChangeNotifierProvider` dipasang membungkus root aplikasi (`CourseExplorerApp`) di dalam fungsi `main()` pada `lib/main.dart`. Dengan posisi di atas root `MaterialApp`, seluruh widget dan screen di bawahnya (termasuk yang dibuka via `Navigator.push`) dapat mengakses `CourseProvider` melalui `BuildContext`. Aplikasi tetap berjalan normal.
+
+
 
 
