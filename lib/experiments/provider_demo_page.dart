@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../course_data.dart';
 import '../identity.dart';
 import '../providers/course_provider.dart';
+import 'model_demo_page.dart';
 
 class ProviderDemoPage extends StatelessWidget {
   const ProviderDemoPage({super.key});
@@ -12,7 +13,21 @@ class ProviderDemoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('build: ProviderDemoPage (halaman, tidak listen)');
     return Scaffold(
-      appBar: AppBar(title: const Text('Tahap 7 - watch/read/Consumer')),
+      appBar: AppBar(
+        title: const Text('Tahap 7 - watch/read/Consumer'),
+        actions: [
+          IconButton(
+            tooltip: 'Demo Model Course (Tahap 8)',
+            icon: const Icon(Icons.data_object),
+            onPressed: () => Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => const ModelDemoPage(),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const IdentityBanner(),

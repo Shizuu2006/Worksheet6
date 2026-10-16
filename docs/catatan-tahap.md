@@ -71,6 +71,13 @@ Pengamatan rebuild pada `ProviderDemoPage`:
 Pertanyaan: Mengapa `onPressed` lebih cocok memakai `read()` daripada `watch()`?
 Jawaban: `onPressed` dijalankan saat event callback tombol ditekan, bukan saat proses rendering widget (`build()`). `watch()` mendaftarkan widget sebagai listener dan hanya boleh dipanggil di dalam method `build()`; memanggilnya di callback dapat menimbulkan runtime error dan memicu rebuild yang tidak perlu. Sementara itu, `read()` mengambil objek provider satu kali tanpa berlangganan (tidak listen), sehingga tepat dan efisien untuk memanggil method aksi seperti `toggleFavorite()`.
 
+## Tahap 8 - Model Course
+
+Model `Course` dibuat dengan atribut: `code`, `title`, `credits`, dan `status`. Factory `Course.fromJson()` memusatkan parsing struktur Map/JSON menjadi objek bertipe statis kuat (*strongly typed*).
+
+UI pada `ModelDemoPage` membaca nilai melalui properti objek yang jelas seperti `course.title` dan `course.credits`, bukan `map['title']` atau `map['credits']`. Hal ini menghilangkan risiko typo key pada UI dan memusatkan validasi data di satu tempat.
+
+
 
 
 
