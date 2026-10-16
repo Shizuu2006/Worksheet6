@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../identity.dart';
+import 'provider_demo_page.dart';
 
 class ValueNotifierDemoPage extends StatefulWidget {
   const ValueNotifierDemoPage({super.key});
@@ -21,7 +22,21 @@ class _ValueNotifierDemoPageState extends State<ValueNotifierDemoPage> {
   Widget build(BuildContext context) {
     debugPrint('build: ValueNotifierDemoPage (parent)');
     return Scaffold(
-      appBar: AppBar(title: const Text('Tahap 4 - ValueNotifier')),
+      appBar: AppBar(
+        title: const Text('Tahap 4 - ValueNotifier'),
+        actions: [
+          IconButton(
+            tooltip: 'Demo Provider (Tahap 7)',
+            icon: const Icon(Icons.share),
+            onPressed: () => Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => const ProviderDemoPage(),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const IdentityBanner(),

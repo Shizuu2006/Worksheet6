@@ -60,6 +60,18 @@ Dependency `provider` berhasil ditambahkan ke `pubspec.yaml` dan perintah `flutt
 
 `ChangeNotifierProvider` dipasang membungkus root aplikasi (`CourseExplorerApp`) di dalam fungsi `main()` pada `lib/main.dart`. Dengan posisi di atas root `MaterialApp`, seluruh widget dan screen di bawahnya (termasuk yang dibuka via `Navigator.push`) dapat mengakses `CourseProvider` melalui `BuildContext`. Aplikasi tetap berjalan normal.
 
+## Tahap 7 - context.watch(), context.read(), dan Consumer
+
+Pengamatan rebuild pada `ProviderDemoPage`:
+- Saat tombol ikon favorit ditekan, halaman induk `ProviderDemoPage` dan widget `_CourseTile` tidak mengalami rebuild.
+- Yang di-rebuild secara spesifik hanyalah:
+  1. `_FavoriteCount` (karena menggunakan `context.watch<CourseProvider>()` untuk mendengarkan perubahan data panjang favorites).
+  2. Widget ikon di dalam `Consumer<CourseProvider>` pada item yang bersangkutan.
+
+Pertanyaan: Mengapa `onPressed` lebih cocok memakai `read()` daripada `watch()`?
+Jawaban: `onPressed` dijalankan saat event callback tombol ditekan, bukan saat proses rendering widget (`build()`). `watch()` mendaftarkan widget sebagai listener dan hanya boleh dipanggil di dalam method `build()`; memanggilnya di callback dapat menimbulkan runtime error dan memicu rebuild yang tidak perlu. Sementara itu, `read()` mengambil objek provider satu kali tanpa berlangganan (tidak listen), sehingga tepat dan efisien untuk memanggil method aksi seperti `toggleFavorite()`.
+
+
 
 
 
