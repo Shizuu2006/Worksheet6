@@ -11,4 +11,13 @@ void main() {
     expect(find.textContaining(studentId), findsWidgets);
     expect(find.textContaining(studentName), findsWidgets);
   });
+
+  testWidgets('Course Explorer renders course list', (tester) async {
+    await tester.pumpWidget(const CourseExplorerApp());
+    await tester.pump();
+
+    expect(find.text('Course Explorer'), findsOneWidget);
+    expect(find.text('Pemrograman Mobile'), findsOneWidget);
+    expect(find.text('IF101'), findsOneWidget);
+  });
 }
