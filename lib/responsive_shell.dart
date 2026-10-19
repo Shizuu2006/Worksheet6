@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'courses_page.dart';
-import 'experiments/local_state_demo.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
+import 'providers/course_provider.dart';
 
 class ResponsiveShell extends StatefulWidget {
   const ResponsiveShell({super.key});
@@ -14,31 +15,64 @@ class ResponsiveShell extends StatefulWidget {
 
 class _ResponsiveShellState extends State<ResponsiveShell> {
   int _index = 0;
-  final List<Widget> _pages = const [HomePage(), CoursesPage(), ProfilePage()];
 
   void _select(int i) => setState(() => _index = i);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final favCount = context.watch<CourseProvider>().favorites.length;
+
+    final List<Widget> pages = [
+      HomePage(onNavigateToCourses: () => _select(1)),
+      const CoursesPage(),
+      const ProfilePage(),
+    ];
+
     return LayoutBuilder(
       builder: (context, c) {
         final expanded = c.maxWidth >= 840;
-        final content = IndexedStack(index: _index, children: _pages);
+        final content = IndexedStack(index: _index, children: pages);
+
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Course Explorer'),
-            actions: [
-              IconButton(
-                tooltip: 'Demo local state',
-                icon: const Icon(Icons.science),
-                onPressed: () => Navigator.push<void>(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (_) => const LocalStateDemoPage(),
+            title: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(7),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.school_rounded,
+                    color: Colors.white,
+                    size: 20,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Course Explorer',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      expanded ? 'Expanded Mode (Rail)' : 'Adaptive Mobile Mode',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey.shade500,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           body: expanded
               ? Row(
@@ -47,22 +81,43 @@ class _ResponsiveShellState extends State<ResponsiveShell> {
                       selectedIndex: _index,
                       onDestinationSelected: _select,
                       labelType: NavigationRailLabelType.all,
-                      destinations: const [
-                        NavigationRailDestination(
-                          icon: Icon(Icons.home),
+                      backgroundColor: Colors.white,
+                      indicatorColor: cs.primaryContainer,
+                      leading: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: cs.primary.withOpacity(0.1),
+                          child: Icon(Icons.explore_rounded, color: cs.primary, size: 20),
+                        ),
+                      ),
+                      destinations: [
+                        const NavigationRailDestination(
+                          icon: Icon(Icons.home_outlined),
+                          selectedIcon: Icon(Icons.home_rounded),
                           label: Text('Home'),
                         ),
                         NavigationRailDestination(
-                          icon: Icon(Icons.school),
-                          label: Text('Courses'),
+                          icon: Badge(
+                            isLabelVisible: favCount > 0,
+                            label: Text('$favCount'),
+                            child: const Icon(Icons.school_outlined),
+                          ),
+                          selectedIcon: Badge(
+                            isLabelVisible: favCount > 0,
+                            label: Text('$favCount'),
+                            child: const Icon(Icons.school_rounded),
+                          ),
+                          label: const Text('Courses'),
                         ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.person),
+                        const NavigationRailDestination(
+                          icon: Icon(Icons.person_outline_rounded),
+                          selectedIcon: Icon(Icons.person_rounded),
                           label: Text('Profile'),
                         ),
                       ],
                     ),
-                    const VerticalDivider(width: 1),
+                    const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE2E8F0)),
                     Expanded(child: content),
                   ],
                 )
@@ -72,10 +127,33 @@ class _ResponsiveShellState extends State<ResponsiveShell> {
               : NavigationBar(
                   selectedIndex: _index,
                   onDestinationSelected: _select,
-                  destinations: const [
-                    NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-                    NavigationDestination(icon: Icon(Icons.school), label: 'Courses'),
-                    NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
+                  elevation: 2,
+                  backgroundColor: Colors.white,
+                  indicatorColor: cs.primaryContainer,
+                  destinations: [
+                    const NavigationDestination(
+                      icon: Icon(Icons.home_outlined),
+                      selectedIcon: Icon(Icons.home_rounded),
+                      label: 'Home',
+                    ),
+                    NavigationDestination(
+                      icon: Badge(
+                        isLabelVisible: favCount > 0,
+                        label: Text('$favCount'),
+                        child: const Icon(Icons.school_outlined),
+                      ),
+                      selectedIcon: Badge(
+                        isLabelVisible: favCount > 0,
+                        label: Text('$favCount'),
+                        child: const Icon(Icons.school_rounded),
+                      ),
+                      label: 'Courses',
+                    ),
+                    const NavigationDestination(
+                      icon: Icon(Icons.person_outline_rounded),
+                      selectedIcon: Icon(Icons.person_rounded),
+                      label: 'Profile',
+                    ),
                   ],
                 ),
         );

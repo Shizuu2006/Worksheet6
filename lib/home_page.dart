@@ -1,134 +1,250 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'course_data.dart';
 import 'identity.dart';
+import 'providers/course_provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final VoidCallback? onNavigateToCourses;
+  const HomePage({super.key, this.onNavigateToCourses});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _showDetail = false;
-
   @override
   Widget build(BuildContext context) {
-    final localStateExamples = [
-      'Password visibility toggle',
-      'Expanded/collapsed detail course',
-      'Selected tab aktif',
-      'Filter dropdown lokal',
-      'Modal menu buka/tutup',
-    ];
-
-    final sharedStateExamples = [
-      'Favorites yang dipakai banyak screen',
-      'Login session / user profile',
-      'Theme preference',
-      'Cart / keranjang belanja',
-      'Progress belajar',
-    ];
+    final theme = Theme.of(context);
+    final favCount = context.watch<CourseProvider>().favorites.length;
+    final totalCredits = courses.fold<int>(
+      0,
+      (sum, item) => sum + (item['credits'] as int? ?? 0),
+    );
 
     return Column(
       children: [
         const IdentityBanner(),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Tahap 1 - Local State vs Shared State',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Local state cocok untuk widget yang hanya memerlukan state sementara; shared state dibutuhkan lintas screen atau widget.',
-                ),
-                const SizedBox(height: 16),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Contoh Local State dengan setState()',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        SwitchListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: const Text('Tampilkan detail kursus'),
-                          value: _showDetail,
-                          onChanged: (value) {
-                            setState(() => _showDetail = value);
-                          },
-                        ),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          child: _showDetail
-                              ? Container(
-                                  key: const ValueKey('detail'),
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.primaryContainer,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Text(
-                                    'Local state aktif. Detail course bisa ditampilkan atau disembunyikan tanpa mengubah data global aplikasi.',
-                                  ),
-                                )
-                              : const SizedBox.shrink(key: ValueKey('empty')),
-                        ),
-                      ],
+                // 1. Hero Welcome Card
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    borderRadius: BorderRadius.circular(22),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF4F46E5).withOpacity(0.35),
+                        blurRadius: 18,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.bolt_rounded, color: Colors.amber, size: 16),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Semester 5 • Kurikulum 2026',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(
+                            Icons.auto_stories_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Selamat Datang di\nCourse Explorer',
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          height: 1.2,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Jelajahi mata kuliah, kelola daftar favorit, dan pelajari implementasi responsif serta navigasi aplikasi Flutter.',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 13,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                Text(
-                  'Identifikasi State',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    SizedBox(
-                      width: 280,
-                      child: _StateGroup(
-                        title: 'Local State',
-                        items: localStateExamples,
-                        color: Colors.green.shade100,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 280,
-                      child: _StateGroup(
-                        title: 'Shared State',
-                        items: sharedStateExamples,
-                        color: Colors.blue.shade100,
-                      ),
-                    ),
-                  ],
-                ),
+
                 const SizedBox(height: 20),
-                Text(
-                  'Jelajahi ${courses.length} course yang tersedia.',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+
+                // 2. Stats Row
+                Row(
                   children: [
-                    for (final c in courses)
-                      Chip(label: Text(c['code'] as String)),
+                    Expanded(
+                      child: _StatCard(
+                        icon: Icons.menu_book_rounded,
+                        iconColor: const Color(0xFF3B82F6),
+                        title: 'Total Kursus',
+                        value: '${courses.length}',
+                        subtitle: 'Mata Kuliah',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _StatCard(
+                        icon: Icons.timer_rounded,
+                        iconColor: const Color(0xFF10B981),
+                        title: 'Beban SKS',
+                        value: '$totalCredits',
+                        subtitle: 'Total SKS',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _StatCard(
+                        icon: Icons.favorite_rounded,
+                        iconColor: const Color(0xFFEF4444),
+                        title: 'Favorit',
+                        value: '$favCount',
+                        subtitle: 'Tersimpan',
+                      ),
+                    ),
                   ],
+                ),
+
+                const SizedBox(height: 24),
+
+                // 3. Course Highlights Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Daftar Mata Kuliah',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.onNavigateToCourses != null)
+                      TextButton.icon(
+                        onPressed: widget.onNavigateToCourses,
+                        icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+                        label: const Text('Buka Halaman Kursus'),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  children: courses.map((c) {
+                    final isWajib = (c['status'] as String).toLowerCase() == 'wajib';
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF0F172A).withOpacity(0.03),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: InkWell(
+                        onTap: widget.onNavigateToCourses,
+                        borderRadius: BorderRadius.circular(14),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: isWajib
+                                    ? const Color(0xFFEEF2FF)
+                                    : const Color(0xFFFEF3C7),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                c['code'] as String,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: isWajib
+                                      ? const Color(0xFF4338CA)
+                                      : const Color(0xFFB45309),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    c['title'] as String,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Color(0xFF0F172A),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '${c['credits']} SKS • ${c['status']}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                              color: Color(0xFF94A3B8),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -139,44 +255,66 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _StateGroup extends StatelessWidget {
+class _StatCard extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
   final String title;
-  final List<String> items;
-  final Color color;
+  final String value;
+  final String subtitle;
 
-  const _StateGroup({
+  const _StatCard({
+    required this.icon,
+    required this.iconColor,
     required this.title,
-    required this.items,
-    required this.color,
+    required this.value,
+    required this.subtitle,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall,
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
           ),
-          const SizedBox(height: 8),
-          ...items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.check_circle, size: 16),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(item)),
-                  ],
-                ),
-              )),
+          const SizedBox(height: 12),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F172A),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey.shade600,
+            ),
+          ),
         ],
       ),
     );

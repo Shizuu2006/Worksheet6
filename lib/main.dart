@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'lab.dart';
-import 'providers/course_provider.dart';
-import 'responsive_shell.dart';
+import 'app_theme.dart';
+import 'identity.dart';
 
-const bool useLab = false;
-
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => CourseProvider(),
-      child: const CourseExplorerApp(),
-    ),
-  );
-}
+void main() => runApp(const CourseExplorerApp());
 
 class CourseExplorerApp extends StatelessWidget {
   const CourseExplorerApp({super.key});
@@ -24,8 +13,32 @@ class CourseExplorerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Course Explorer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
-      home: useLab ? const LabPage() : const ResponsiveShell(),
+      theme: appTheme,
+      home: const Stage0(),
+    );
+  }
+}
+
+class Stage0 extends StatelessWidget {
+  const Stage0({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tahap 0 - Environment')),
+      body: const Column(
+        children: [
+          IdentityBanner(),
+          Expanded(
+            child: Center(
+              child: Text(
+                'Project siap dijalankan.',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

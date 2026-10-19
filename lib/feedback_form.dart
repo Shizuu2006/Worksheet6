@@ -14,8 +14,16 @@ class _FeedbackFormState extends State<FeedbackForm> {
   final _nameCtrl = TextEditingController(text: studentName);
   final _nimCtrl = TextEditingController(text: studentId);
   final _commentCtrl = TextEditingController();
+  String _selectedCategory = 'Tampilan UI';
   String? _result;
   bool _loading = false;
+
+  final List<String> _categories = [
+    'Tampilan UI',
+    'Materi Kuliah',
+    'Fitur & Navigasi',
+    'Lainnya',
+  ];
 
   @override
   void dispose() {
@@ -34,11 +42,27 @@ class _FeedbackFormState extends State<FeedbackForm> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Konfirmasi'),
-        content: const Text('Kirim feedback sekarang?'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.help_outline_rounded, color: Color(0xFF4F46E5)),
+            SizedBox(width: 10),
+            Text('Konfirmasi Kirim'),
+          ],
+        ),
+        content: Text(
+          'Kirim feedback kategori "$_selectedCategory" sekarang?',
+          style: const TextStyle(fontSize: 14),
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Batal')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Kirim')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Kirim Sekarang'),
+          ),
         ],
       ),
     );
@@ -50,10 +74,25 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
     setState(() {
       _loading = false;
-      _result = '${_nameCtrl.text} (${_nimCtrl.text}): ${_commentCtrl.text.trim()}';
+      _result =
+          '[$_selectedCategory] ${_nameCtrl.text} (${_nimCtrl.text}): ${_commentCtrl.text.trim()}';
     });
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Data berhasil disimpan')));
+    _commentCtrl.clear();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        backgroundColor: const Color(0xFF065F46),
+        content: const Row(
+          children: [
+            Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+            SizedBox(width: 10),
+            Text('Feedback berhasil disimpan dan terkirim!'),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -63,55 +102,144 @@ class _FeedbackFormState extends State<FeedbackForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Category Selector
+          const Text(
+            'Kategori Feedback:',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF475569),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _categories.map((cat) {
+                final isSelected = _selectedCategory == cat;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ChoiceChip(
+                    label: Text(cat),
+                    selected: isSelected,
+                    onSelected: (selected) {
+                      if (selected) {
+                        setState(() => _selectedCategory = cat);
+                      }
+                    },
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Name Input
           TextFormField(
             controller: _nameCtrl,
             decoration: const InputDecoration(
-              labelText: 'Nama',
-              border: OutlineInputBorder(),
+              labelText: 'Nama Mahasiswa',
+              prefixIcon: Icon(Icons.person_outline_rounded),
             ),
             validator: (v) => _required(v, 'Nama'),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
+
+          // NIM Input
           TextFormField(
             controller: _nimCtrl,
             decoration: const InputDecoration(
               labelText: 'NIM',
-              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.badge_outlined),
             ),
             validator: (v) => _required(v, 'NIM'),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
+
+          // Comment Input
           TextFormField(
             controller: _commentCtrl,
-            maxLines: 3,
+            maxLines: 4,
             decoration: const InputDecoration(
-              labelText: 'Komentar',
-              border: OutlineInputBorder(),
+              labelText: 'Komentar / Saran',
+              hintText: 'Tuliskan ulasan atau saran konstruktif Anda...',
+              alignLabelWithHint: true,
+              prefixIcon: Padding(
+                padding: EdgeInsets.only(bottom: 50),
+                child: Icon(Icons.comment_outlined),
+              ),
             ),
             validator: (v) =>
                 (v == null || v.trim().length < 5) ? 'Komentar minimal 5 karakter' : null,
           ),
-          const SizedBox(height: 16),
-          FilledButton(
+          const SizedBox(height: 18),
+
+          // Submit Button
+          FilledButton.icon(
             onPressed: _loading ? null : _submit,
-            child: _loading
+            icon: _loading
                 ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
                   )
-                : const Text('Kirim Feedback'),
+                : const Icon(Icons.send_rounded, size: 18),
+            label: Text(_loading ? 'Mengirim data...' : 'Kirim Feedback'),
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
           ),
-          if (_result != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text('Feedback diterima:\n$_result'),
-                ),
+
+          // Result Card
+          if (_result != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0FDF4),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF86EFAC)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    color: Color(0xFF16A34A),
+                    size: 22,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Feedback Terakhir Terkirim',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Color(0xFF15803D),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _result!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF166534),
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
+          ],
         ],
       ),
     );

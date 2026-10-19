@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../identity.dart';
 import '../models/course.dart';
 
+import 'service_demo_page.dart';
+
 class ModelDemoPage extends StatelessWidget {
   const ModelDemoPage({super.key});
 
@@ -16,7 +18,21 @@ class ModelDemoPage extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Tahap 8 - Model Course')),
+      appBar: AppBar(
+        title: const Text('Tahap 8 - Model Course'),
+        actions: [
+          IconButton(
+            tooltip: 'Demo Service (Tahap 9)',
+            icon: const Icon(Icons.cloud_download),
+            onPressed: () => Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => const ServiceDemoPage(),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const IdentityBanner(),
