@@ -146,3 +146,35 @@ Shared favorite dikelola oleh Provider sehingga perubahan dari daftar maupun
 detail langsung tercermin di halaman Favorit; identitas Nama dan NIM tetap
 tampil pada screen. Test integrasi memverifikasi pemuatan data dan sinkronisasi
 favorite lintas screen.
+
+## Tahap 15 - Debugging State Management
+
+**Kasus A - `notifyListeners()`:** saat notifikasi sementara dihapus dari
+`toggleFavorite()`, test listener menerima 0 notifikasi, bukan 2 untuk dua kali
+toggle. Consumer tidak diberi sinyal untuk rebuild meskipun nilai di Provider
+berubah. Pemanggilan `notifyListeners()` dipulihkan; test UI memastikan jumlah
+favorite ikut diperbarui.
+
+**Kasus B - posisi `BuildContext`:** mencoba `context.watch<CourseProvider>()`
+dengan context yang membuat `ChangeNotifierProvider` menghasilkan
+`ProviderNotFoundException`, sebab context tersebut berada di atas Provider.
+Pindahkan pemanggilan ke context descendant, misalnya di dalam `Builder` yang
+menjadi child Provider atau di screen di bawahnya. Test mencakup konteks salah
+dan susunan yang sudah diperbaiki.
+
+**Kasus C - error Service:** Service palsu yang melempar exception diteruskan
+oleh Repository ke Provider. Provider menyimpan pesan di `error`, menghentikan
+loading, dan `CoursesPage` menampilkan pesan gagal beserta tombol coba lagi;
+test memastikan error terlihat.
+
+**Kasus D - perubahan state setelah async:** sebelum memanggil `setState()`
+setelah `await`, pastikan State masih mounted. `FeedbackForm` sudah memakai
+guard ini; guard yang sama ditambahkan pada demo Service untuk jalur berhasil
+maupun gagal agar widget yang sudah ditutup tidak diperbarui.
+
+**Langkah pertama ketika data state berubah tetapi UI tidak berubah:** telusuri
+notifikasi dari sumber perubahan: pastikan method mengubah nilai yang benar dan
+memanggil `notifyListeners()`, lalu pastikan widget yang seharusnya berubah
+mendengarkan Provider dengan `watch`/`Consumer` dan memakai context di bawah
+Provider. Periksa juga bahwa widget benar-benar membaca state yang sama, bukan
+salinan lokal.

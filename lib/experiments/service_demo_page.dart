@@ -25,6 +25,7 @@ class _ServiceDemoPageState extends State<ServiceDemoPage> {
 
     try {
       final list = await _service.loadCourses();
+      if (!mounted) return;
       debugPrint('=== [Tahap 9] UJI SERVICE VIA DEBUGPRINT ===');
       debugPrint('Berhasil memuat ${list.length} courses:');
       for (final c in list) {
@@ -39,6 +40,7 @@ class _ServiceDemoPageState extends State<ServiceDemoPage> {
       });
     } catch (e) {
       debugPrint('Error saat memuat service: $e');
+      if (!mounted) return;
       setState(() {
         _loading = false;
         _message = 'Gagal memuat data: $e';
