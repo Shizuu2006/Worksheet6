@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'course_card.dart';
-import 'course_data.dart';
 import 'course_detail_page.dart';
 import 'identity.dart';
 import 'providers/course_provider.dart';
@@ -37,7 +36,9 @@ class _CoursesPageState extends State<CoursesPage> {
   }
 
   Future<void> _openDetail(
-      BuildContext context, Map<String, dynamic> course) async {
+    BuildContext context,
+    Map<String, dynamic> course,
+  ) async {
     final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (_) => CourseDetailPage(course: course)),
@@ -52,7 +53,9 @@ class _CoursesPageState extends State<CoursesPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           backgroundColor: const Color(0xFF1E293B),
           content: Row(
             children: [
@@ -95,7 +98,10 @@ class _CoursesPageState extends State<CoursesPage> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(ctx).colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(8),
@@ -115,7 +121,10 @@ class _CoursesPageState extends State<CoursesPage> {
               const SizedBox(height: 12),
               Text(
                 course['title'] as String,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -128,7 +137,10 @@ class _CoursesPageState extends State<CoursesPage> {
                 children: [
                   Text(
                     '$studentId - $studentName',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   FilledButton(
                     onPressed: () {
@@ -149,9 +161,18 @@ class _CoursesPageState extends State<CoursesPage> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CourseProvider>();
+    final loadedCourses = provider.courses.map((course) {
+      return <String, dynamic>{
+        'code': course.code,
+        'title': course.title,
+        'credits': course.credits,
+        'status': course.status,
+        'description': course.description,
+      };
+    }).toList();
 
     // Filtering logic
-    final filtered = courses.where((c) {
+    final filtered = loadedCourses.where((c) {
       final code = c['code'] as String;
       final title = (c['title'] as String).toLowerCase();
       final q = _searchQuery.toLowerCase();
@@ -203,7 +224,12 @@ class _CoursesPageState extends State<CoursesPage> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (final filter in ['Semua', 'Wajib', 'Pilihan', 'Favorit']) ...[
+                    for (final filter in [
+                      'Semua',
+                      'Wajib',
+                      'Pilihan',
+                      'Favorit',
+                    ]) ...[
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: FilterChip(
@@ -236,6 +262,34 @@ class _CoursesPageState extends State<CoursesPage> {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
+              if (provider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (provider.error != null) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.error_outline, size: 40),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Gagal memuat mata kuliah:\n${provider.error}',
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        FilledButton.icon(
+                          onPressed: () =>
+                              context.read<CourseProvider>().loadCourses(),
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Coba lagi'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
               if (filtered.isEmpty) {
                 return Center(
                   child: Padding(

@@ -17,7 +17,8 @@ class CourseExplorerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) =>
-          CourseProvider(repository: CourseRepository(CourseService())),
+          CourseProvider(repository: CourseRepository(CourseService()))
+            ..loadCourses(),
       child: MaterialApp(
         title: 'Course Explorer',
         debugShowCheckedModeBanner: false,

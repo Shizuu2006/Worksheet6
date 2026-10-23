@@ -97,3 +97,11 @@ Jika sumber data diganti dari JSON lokal menjadi API, perubahan detail jaringan
 dapat ditempatkan di service. Provider dan screen tetap memakai kontrak
 repository yang sama sehingga tidak perlu mengetahui cara data diambil.
 
+## Tahap 11 - Provider untuk Async State
+
+`CourseProvider` menyimpan `courses`, `isLoading`, dan `error`, lalu memuat
+data lewat `CourseRepository`. `CoursesPage` menampilkan indikator saat data
+sedang dimuat, pesan error dengan tombol coba lagi jika pemuatan gagal, dan
+daftar mata kuliah dari hasil Provider setelah berhasil. Deskripsi course ikut
+dipertahankan saat model dibentuk dari JSON agar halaman detail tetap
+menampilkan informasi asset.
