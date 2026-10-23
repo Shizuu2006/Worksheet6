@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:course_explorer/courses_page.dart';
+import 'package:course_explorer/screens/courses_page.dart';
 import 'package:course_explorer/models/course.dart';
 import 'package:course_explorer/providers/course_provider.dart';
 import 'package:course_explorer/repositories/course_repository.dart';

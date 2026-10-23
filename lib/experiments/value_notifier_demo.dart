@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../identity.dart';
+import '../widgets/identity_banner.dart';
 import 'provider_demo_page.dart';
 
 class ValueNotifierDemoPage extends StatefulWidget {

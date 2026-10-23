@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../course_card.dart';
+import '../widgets/course_card.dart';
 import '../course_data.dart';
-import '../identity.dart';
+import '../widgets/identity_banner.dart';
 import 'value_notifier_demo.dart';
 
 class LiftingStateDemoPage extends StatefulWidget {

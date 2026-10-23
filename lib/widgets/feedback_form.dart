@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'identity.dart';
+import '../identity.dart';
 
 class FeedbackForm extends StatefulWidget {
   const FeedbackForm({super.key});

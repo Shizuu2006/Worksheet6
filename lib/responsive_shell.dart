@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'courses_page.dart';
-import 'home_page.dart';
-import 'profile_page.dart';
+import 'screens/courses_page.dart';
+import 'screens/home_page.dart';
+import 'screens/profile_page.dart';
 import 'providers/course_provider.dart';
 
 class ResponsiveShell extends StatefulWidget {

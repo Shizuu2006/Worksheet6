@@ -1,5 +1,20 @@
 # Catatan Worksheet State Management & Architecture
 
+## Tahap 0 - Review Project dan Environment
+
+Flutter 3.47.7 dan Dart 3.13.5 terpasang. `flutter pub get` berhasil dan
+`flutter test` lulus. Aplikasi berhasil dijalankan melalui web server; navigasi
+ke daftar course dan halaman detail juga berfungsi, dengan identitas Nama/NIM
+tampil. Chrome, Edge, dan Windows terdeteksi. Android belum dapat dijalankan
+karena Android SDK belum tersedia, dan build Windows desktop belum siap karena
+Visual Studio belum terpasang.
+
+Repository berada di branch `main`. Remote `origin` telah diarahkan ke
+`https://github.com/Shizuu2006/Worksheet6.git`, lalu branch lokal diselaraskan
+dengan `origin/main` yang sebelumnya 5 commit lebih maju. Perubahan lokal yang
+sudah ada dipertahankan, dipulihkan setelah sinkronisasi, dan belum di-commit
+atau di-push.
+
 ## Tahap 1 - Local State vs Shared State
 
 | State atau data | Lokasi/penggunaan di Course Explorer | Kategori | Alasan |
@@ -105,3 +120,12 @@ sedang dimuat, pesan error dengan tombol coba lagi jika pemuatan gagal, dan
 daftar mata kuliah dari hasil Provider setelah berhasil. Deskripsi course ikut
 dipertahankan saat model dibentuk dari JSON agar halaman detail tetap
 menampilkan informasi asset.
+
+## Tahap 12 - Refactor Struktur Folder
+
+Kode disusun menurut tanggung jawab: model data berada di `models`, pemuatan
+asset di `services`, abstraksi data di `repositories`, state aplikasi di
+`providers`, halaman aplikasi di `screens`, dan widget reusable seperti kartu
+course, form feedback, serta banner identitas di `widgets`. File identitas
+mahasiswa tetap terpisah dari widget banner agar konstanta identitas dapat
+digunakan tanpa mengimpor Flutter UI. Import diperbarui mengikuti lokasi baru.

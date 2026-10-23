@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'course_data.dart';
-import 'identity.dart';
-import 'providers/course_provider.dart';
+import '../course_data.dart';
+import '../widgets/identity_banner.dart';
+import '../providers/course_provider.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback? onNavigateToCourses;

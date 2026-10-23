@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../identity.dart';
+import '../widgets/identity_banner.dart';
 import '../models/course.dart';
 
 import 'service_demo_page.dart';

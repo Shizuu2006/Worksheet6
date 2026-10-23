@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app_theme.dart';
-import 'identity.dart';
+import 'widgets/identity_banner.dart';
 import 'providers/course_provider.dart';
 import 'repositories/course_repository.dart';
 import 'responsive_shell.dart';

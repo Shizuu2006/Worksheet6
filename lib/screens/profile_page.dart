@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'course_data.dart';
-import 'feedback_form.dart';
-import 'identity.dart';
-import 'providers/course_provider.dart';
+import '../course_data.dart';
+import '../widgets/feedback_form.dart';
+import '../identity.dart';
+import '../widgets/identity_banner.dart';
+import '../providers/course_provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

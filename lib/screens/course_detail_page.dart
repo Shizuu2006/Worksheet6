@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'identity.dart';
-import 'providers/course_provider.dart';
+import '../identity.dart';
+import '../providers/course_provider.dart';
+import '../widgets/identity_banner.dart';
 
 class CourseDetailPage extends StatelessWidget {
   final Map<String, dynamic> course;

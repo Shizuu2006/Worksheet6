@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'course_card.dart';
+import '../widgets/course_card.dart';
+import '../widgets/identity_banner.dart';
 import 'course_detail_page.dart';
-import 'identity.dart';
-import 'providers/course_provider.dart';
+import '../identity.dart';
+import '../providers/course_provider.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
