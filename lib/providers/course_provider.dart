@@ -1,6 +1,12 @@
 import 'package:flutter/foundation.dart';
 
+import '../repositories/course_repository.dart';
+
 class CourseProvider extends ChangeNotifier {
+  final CourseRepository repository;
+
+  CourseProvider({required this.repository});
+
   final Set<String> favorites = {};
 
   bool isFavorite(String code) => favorites.contains(code);

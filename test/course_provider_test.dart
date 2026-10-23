@@ -1,9 +1,13 @@
 import 'package:course_explorer/providers/course_provider.dart';
+import 'package:course_explorer/repositories/course_repository.dart';
+import 'package:course_explorer/services/course_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('toggleFavorite menambah/menghapus dan memanggil listener', () {
-    final provider = CourseProvider();
+    final provider = CourseProvider(
+      repository: CourseRepository(CourseService()),
+    );
     var notified = 0;
     provider.addListener(() => notified++);
 

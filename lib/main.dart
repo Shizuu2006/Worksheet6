@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'app_theme.dart';
 import 'identity.dart';
 import 'providers/course_provider.dart';
+import 'repositories/course_repository.dart';
 import 'responsive_shell.dart';
+import 'services/course_service.dart';
 
 void main() => runApp(const CourseExplorerApp());
 
@@ -14,15 +16,14 @@ class CourseExplorerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => CourseProvider(),
+      create: (_) =>
+          CourseProvider(repository: CourseRepository(CourseService())),
       child: MaterialApp(
         title: 'Course Explorer',
         debugShowCheckedModeBanner: false,
         theme: appTheme,
         home: const ResponsiveShell(),
-        routes: {
-          '/stage0': (_) => const Stage0(),
-        },
+        routes: {'/stage0': (_) => const Stage0()},
       ),
     );
   }

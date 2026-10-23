@@ -85,4 +85,15 @@ Dengan demikian, detail pemuatan asset dan parsing tidak perlu dilakukan oleh
 screen. Test `test/course_service_test.dart` memastikan service mengembalikan
 daftar model Course dengan field utama yang terisi.
 
+## Tahap 10 - Repository Pattern
+
+`CourseRepository` menerima `CourseService` melalui constructor dan menyediakan
+`getCourses()` untuk layer Provider. Provider bergantung pada repository yang
+wajib diinjeksi, bukan membaca asset atau mem-parsing JSON sendiri. Test
+`test/course_repository_test.dart` menggunakan data source palsu untuk
+memastikan repository meneruskan permintaan dan hasilnya dengan benar.
+
+Jika sumber data diganti dari JSON lokal menjadi API, perubahan detail jaringan
+dapat ditempatkan di service. Provider dan screen tetap memakai kontrak
+repository yang sama sehingga tidak perlu mengetahui cara data diambil.
 
