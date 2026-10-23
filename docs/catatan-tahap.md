@@ -77,8 +77,12 @@ Model `Course` dibuat dengan atribut: `code`, `title`, `credits`, dan `status`. 
 
 UI pada `ModelDemoPage` membaca nilai melalui properti objek yang jelas seperti `course.title` dan `course.credits`, bukan `map['title']` atau `map['credits']`. Hal ini menghilangkan risiko typo key pada UI dan memusatkan validasi data di satu tempat.
 
+## Tahap 9 - Service / Data Source
 
-
-
+`CourseService.loadCourses()` membaca `assets/data/student_data.json` melalui
+`rootBundle`, mengurai JSON, lalu mengembalikan data sebagai `List<Course>`.
+Dengan demikian, detail pemuatan asset dan parsing tidak perlu dilakukan oleh
+screen. Test `test/course_service_test.dart` memastikan service mengembalikan
+daftar model Course dengan field utama yang terisi.
 
 
