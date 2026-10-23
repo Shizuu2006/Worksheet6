@@ -136,3 +136,13 @@ Halaman Favorit ditambahkan ke navigasi bawah pada tampilan ponsel dan
 NavigationRail pada tampilan lebar. Jumlah course favorit ditampilkan sebagai
 badge pada tujuan Favorit. Halaman menampilkan course berdasarkan data Provider,
 menyediakan aksi untuk menghapus favorit, dan dapat membuka detail course.
+
+## Tahap 14 - Mini Project Integrasi Course Explorer v2
+
+Course Explorer menggabungkan model, service, repository, dan Provider untuk
+memuat daftar course serta menampilkan state loading, error, dan success.
+Navigasi tetap responsif dengan halaman Home, Courses, Favorit, dan Profile.
+Shared favorite dikelola oleh Provider sehingga perubahan dari daftar maupun
+detail langsung tercermin di halaman Favorit; identitas Nama dan NIM tetap
+tampil pada screen. Test integrasi memverifikasi pemuatan data dan sinkronisasi
+favorite lintas screen.
