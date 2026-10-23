@@ -178,3 +178,12 @@ memanggil `notifyListeners()`, lalu pastikan widget yang seharusnya berubah
 mendengarkan Provider dengan `watch`/`Consumer` dan memakai context di bawah
 Provider. Periksa juga bahwa widget benar-benar membaca state yang sama, bukan
 salinan lokal.
+
+## Tahap 16 - Dokumentasi Project
+
+README diperbarui dari template Flutter bawaan menjadi panduan Course Explorer.
+Dokumentasi menjelaskan fitur, alur `Screen -> Provider -> Repository ->
+Service -> JSON`, tanggung jawab folder, perilaku shared state favorit, layout
+responsif, state loading/error/success, serta perintah menjalankan project dan
+test. Struktur README menjadi titik masuk agar pengembang dapat memahami dan
+menjalankan project tanpa harus menelusuri seluruh source terlebih dahulu.
