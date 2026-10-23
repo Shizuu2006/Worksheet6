@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/courses_page.dart';
+import 'screens/favorites_page.dart';
 import 'screens/home_page.dart';
 import 'screens/profile_page.dart';
 import 'providers/course_provider.dart';
@@ -27,6 +28,7 @@ class _ResponsiveShellState extends State<ResponsiveShell> {
     final List<Widget> pages = [
       HomePage(onNavigateToCourses: () => _select(1)),
       const CoursesPage(),
+      const FavoritesPage(),
       const ProfilePage(),
     ];
 
@@ -98,17 +100,22 @@ class _ResponsiveShellState extends State<ResponsiveShell> {
                           label: Text('Home'),
                         ),
                         NavigationRailDestination(
+                          icon: const Icon(Icons.school_outlined),
+                          selectedIcon: const Icon(Icons.school_rounded),
+                          label: const Text('Courses'),
+                        ),
+                        NavigationRailDestination(
                           icon: Badge(
                             isLabelVisible: favCount > 0,
                             label: Text('$favCount'),
-                            child: const Icon(Icons.school_outlined),
+                            child: const Icon(Icons.favorite_border_rounded),
                           ),
                           selectedIcon: Badge(
                             isLabelVisible: favCount > 0,
                             label: Text('$favCount'),
-                            child: const Icon(Icons.school_rounded),
+                            child: const Icon(Icons.favorite_rounded),
                           ),
-                          label: const Text('Courses'),
+                          label: const Text('Favorit'),
                         ),
                         const NavigationRailDestination(
                           icon: Icon(Icons.person_outline_rounded),
@@ -137,17 +144,22 @@ class _ResponsiveShellState extends State<ResponsiveShell> {
                       label: 'Home',
                     ),
                     NavigationDestination(
+                      icon: const Icon(Icons.school_outlined),
+                      selectedIcon: const Icon(Icons.school_rounded),
+                      label: 'Courses',
+                    ),
+                    NavigationDestination(
                       icon: Badge(
                         isLabelVisible: favCount > 0,
                         label: Text('$favCount'),
-                        child: const Icon(Icons.school_outlined),
+                        child: const Icon(Icons.favorite_border_rounded),
                       ),
                       selectedIcon: Badge(
                         isLabelVisible: favCount > 0,
                         label: Text('$favCount'),
-                        child: const Icon(Icons.school_rounded),
+                        child: const Icon(Icons.favorite_rounded),
                       ),
-                      label: 'Courses',
+                      label: 'Favorit',
                     ),
                     const NavigationDestination(
                       icon: Icon(Icons.person_outline_rounded),

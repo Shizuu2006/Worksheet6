@@ -129,3 +129,10 @@ asset di `services`, abstraksi data di `repositories`, state aplikasi di
 course, form feedback, serta banner identitas di `widgets`. File identitas
 mahasiswa tetap terpisah dari widget banner agar konstanta identitas dapat
 digunakan tanpa mengimpor Flutter UI. Import diperbarui mengikuti lokasi baru.
+
+## Tahap 13 - Navigasi Halaman Favorit
+
+Halaman Favorit ditambahkan ke navigasi bawah pada tampilan ponsel dan
+NavigationRail pada tampilan lebar. Jumlah course favorit ditampilkan sebagai
+badge pada tujuan Favorit. Halaman menampilkan course berdasarkan data Provider,
+menyediakan aksi untuk menghapus favorit, dan dapat membuka detail course.
